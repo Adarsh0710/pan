@@ -18,7 +18,7 @@ import {
   Mail,Home,
   ChevronRight
 } from 'lucide-react';
-import panIndiaLogo from './assets/panindia.jpg';
+import panIndiaLogo from './assets/panindia.png';
 import logo from './assets/pain1.jpg';
 
 type Page = 'home' | 'about' | 'services' | 'contact';
