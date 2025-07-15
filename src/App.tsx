@@ -777,8 +777,8 @@ const ContactPage = () => (
                 <Clock size={24} className="mt-1 flex-shrink-0" />
                 <div>
                   <h4 className="text-xl font-bold mb-2">Business Hours</h4>
-                  <p className="text-gray-300">Mon-Fri: 9AM - 12:30PM</p>
-                  <p className="text-gray-300">Sat-Sun: 8AM - 6PM</p>
+                  <p className="text-gray-300">Mon-Fri: 9:30AM - 9:30PM</p>
+                  <p className="text-gray-300">Sat-Sun: 9:30AM - 12:30PM</p>
                   <p className="text-gray-300 text-sm mt-2">Emergency service available 24/7</p>
                 </div>
               </div>
