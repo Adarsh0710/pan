@@ -170,8 +170,8 @@ function App() {
         <div className="relative z-10 text-center text-white max-w-6xl mx-auto px-4">
           <div className="animate-fade-in-up">
             <h1 className="text-6xl md:text-8xl lg:text-9xl font-black mb-8 tracking-tighter leading-none">
-              Your Goods.<br />
-              <span className="text-gray-300">Our Journey.</span>
+              Logistics Through Dedication<br />
+              <span className="text-gray-300">& Innovation</span>
             </h1>
             <p className="text-2xl md:text-3xl lg:text-4xl font-light mb-12 tracking-wide opacity-90">
               Connecting India with reliable logistics solutions.
