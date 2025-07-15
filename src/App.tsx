@@ -763,7 +763,7 @@ const ContactPage = () => (
                 <Mail size={24} className="mt-1 flex-shrink-0" />
                 <div>
                   <h4 className="text-xl font-bold mb-2">Email Us</h4>
-                  <p className="text-gray-300">panindiahyd@gmail.com</p>
+                  <p className="text-gray-300">mails@panindialogistics.in</p>
                   
                 </div>
               </div>
@@ -778,8 +778,8 @@ const ContactPage = () => (
                 <Clock size={24} className="mt-1 flex-shrink-0" />
                 <div>
                   <h4 className="text-xl font-bold mb-2">Business Hours</h4>
-                  <p className="text-gray-300">Mon-Fri: 9:30AM - 9:30PM</p>
-                  <p className="text-gray-300">Sat-Sun: 9:30AM - 12:30PM</p>
+                  <p className="text-gray-300">Mon-Sat: 9:30AM - 9:30PM</p>
+                  <p className="text-gray-300">Sun: 9:30AM - 12:30PM</p>
                   <p className="text-gray-300 text-sm mt-2">Emergency service available 24/7</p>
                 </div>
               </div>
@@ -830,7 +830,7 @@ const ContactPage = () => (
             <Mail size={48} className="mx-auto mb-6 text-[#000066]" />
             <h3 className="text-2xl font-bold mb-4 text-[#000066]">Email Support</h3>
             <p className="text-gray-600 mb-4">Get detailed responses within 2 hours</p>
-            <p className="text-xl font-bold">panindiahyd@gmail.com</p>
+            <p className="text-xl font-bold">mails@panindialogistics.in</p>
           </div>
 
           <div className="text-center p-8 bg-[#000066] text-white shadow-lg hover:shadow-xl transition-shadow">
@@ -871,7 +871,7 @@ const Footer = () => (
               <Globe size={20} />
             </a>
             <a
-              href="mailto:panindiahyd@gmail.com"
+              href="mails@panindialogistics.in"
               className="w-12 h-12 bg-gray-800 rounded-full flex items-center justify-center hover:bg-gray-700 transition-colors cursor-pointer"
             >
               <Mail size={20} />
