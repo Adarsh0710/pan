@@ -1,4 +1,75 @@
 
+// import React, { useState, useEffect } from 'react';
+// import { 
+//   Truck, 
+//   Package, 
+//   Clock, 
+//   MapPin, 
+//   CheckCircle, 
+//   Menu, 
+//   X, 
+//   ArrowRight,
+//   Star,
+//   Users,
+//   Globe,
+//   Shield,
+//   ArrowDown,
+//   Phone,
+//   Mail,Home,
+//   ChevronRight
+// } from 'lucide-react';
+// import panIndiaLogo from './assets/panindia.png';
+// import logo from './assets/pain1.jpg';
+
+// type Page = 'home' | 'about' | 'services' | 'contact';
+
+// function App() {
+//   const [currentPage, setCurrentPage] = useState<Page>('home');
+//   const [isMenuOpen, setIsMenuOpen] = useState(false);
+//   const [scrollY, setScrollY] = useState(0);
+//   const [formData, setFormData] = useState({
+//     name: '',
+//     email: '',
+//     pickupCity: '',
+//     dropLocation: '',
+//     notes: ''
+//   });
+
+//   useEffect(() => {
+//     const handleScroll = () => setScrollY(window.scrollY);
+//     window.addEventListener('scroll', handleScroll);
+//     return () => window.removeEventListener('scroll', handleScroll);
+//   }, []);
+
+//   useEffect(() => {
+//     setIsMenuOpen(false);
+//     window.scrollTo(0, 0);
+//   }, [currentPage]);
+
+//   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+//     setFormData({
+//       ...formData,
+//       [e.target.name]: e.target.value
+//     });
+//   };
+
+//   const handleSubmit = (e: React.FormEvent) => {
+//     e.preventDefault();
+//     console.log('Form submitted:', formData);
+//     alert('Thank you for your inquiry! We will contact you soon.');
+//     setFormData({
+//       name: '',
+//       email: '',
+//       pickupCity: '',
+//       dropLocation: '',
+//       notes: ''
+//     });
+//   };
+
+
+
+
+
 import React, { useState, useEffect } from 'react';
 import { 
   Truck, 
@@ -15,7 +86,8 @@ import {
   Shield,
   ArrowDown,
   Phone,
-  Mail,Home,
+  Mail,
+  Home,
   ChevronRight
 } from 'lucide-react';
 import panIndiaLogo from './assets/panindia.png';
@@ -27,6 +99,7 @@ function App() {
   const [currentPage, setCurrentPage] = useState<Page>('home');
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [scrollY, setScrollY] = useState(0);
+  const [showPopup, setShowPopup] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -35,36 +108,59 @@ function App() {
     notes: ''
   });
 
-  useEffect(() => {
-    const handleScroll = () => setScrollY(window.scrollY);
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  // useEffect(() => {
+  //   const handleScroll = () => setScrollY(window.scrollY);
+  //   window.addEventListener('scroll', handleScroll);
+  //   return () => window.removeEventListener('scroll', handleScroll);
+  // }, []);
 
   useEffect(() => {
-    setIsMenuOpen(false);
-    window.scrollTo(0, 0);
+    if (currentPage !== 'contact') {
+      window.scrollTo(0, 0);
+    }
   }, [currentPage]);
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    });
-  };
+  // const handleInputChange = (e) => {
+  //   const { name, value } = e.target;
+  //   setFormData({ ...formData, [name]: value });
+  // };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    console.log('Form submitted:', formData);
-    alert('Thank you for your inquiry! We will contact you soon.');
-    setFormData({
-      name: '',
-      email: '',
-      pickupCity: '',
-      dropLocation: '',
-      notes: ''
-    });
-  };
+  // const handleSubmit = async () => {
+  //   // Validate required fields
+  //   if (!formData.name || !formData.email || !formData.pickupCity || !formData.dropLocation) {
+  //     alert('Please fill in all required fields');
+  //     return;
+  //   }
+
+  //   try {
+  //     const payload = new FormData();
+  //     payload.append('access_key', '8532b46d-199f-4629-a83a-76b2565b22b2');
+  //     payload.append('subject', 'New Shipment Request from Website');
+  //     payload.append('from_name', 'PanIndia Logistics Website');
+  //     Object.entries(formData).forEach(([key, val]) => payload.append(key, val));
+
+  //     const response = await fetch('https://api.web3forms.com/submit', {
+  //       method: 'POST',
+  //       body: payload
+  //     });
+
+  //     if (response.ok) {
+  //       setShowPopup(true);
+  //       setFormData({
+  //         name: '',
+  //         email: '',
+  //         pickupCity: '',
+  //         dropLocation: '',
+  //         notes: ''
+  //       });
+  //     } else {
+  //       alert('There was an error submitting your request. Please try again.');
+  //     }
+  //   } catch (error) {
+  //     console.error('Form error:', error);
+  //     alert('There was an error submitting your request. Please try again.');
+  //   }
+  // };
 
   const Navigation = () => (
   //  <nav className="fixed top-0 left-0 right-0 bg-white/95 backdrop-blur-md z-50 border-b border-gray-100 shadow-sm">
