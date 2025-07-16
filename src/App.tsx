@@ -851,34 +851,73 @@ function App() {
 
 
 
-
-
+  
 const ContactPage = () => {
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    pickupCity: "",
+    dropLocation: "",
+    notes: ""
+  });
+
   const [showPopup, setShowPopup] = useState(false);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const form = e.target;
+  useEffect(() => {
+    const handleScroll = () => window.scrollY;
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
-    // Submit form via native HTML submission
-    fetch("https://api.web3forms.com/submit", {
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  const handleSubmit = async () => {
+    const payload = {
+      access_key: "a3e2feb2-b8e4-49d7-a9ea-53c841498cca",
+      subject: `New Shipment Request from ${formData.name}`,
+      from_name: formData.name,
+      replyto: formData.email,
+      name: formData.name,
+      email: formData.email,
+      pickupCity: formData.pickupCity,
+      dropLocation: formData.dropLocation,
+      notes: formData.notes
+    };
+
+    const response = await fetch("https://api.web3forms.com/submit", {
       method: "POST",
-      body: new FormData(form)
-    })
-      .then((res) => {
-        if (res.ok) {
-          setShowPopup(true);
-          form.reset();
-        }
-      })
-      .catch((err) => {
-        console.error("Form submission error:", err);
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(payload)
+    });
+
+    const result = await response.json();
+
+    if (result.success) {
+      setShowPopup(true);
+      setFormData({
+        name: "",
+        email: "",
+        pickupCity: "",
+        dropLocation: "",
+        notes: ""
       });
+    } else {
+      alert("Something went wrong. Please try again.");
+    }
   };
 
   return (
     <div className="pt-20 relative">
-
       {/* ✅ Thank You Popup */}
       {showPopup && (
         <div className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50">
@@ -890,18 +929,20 @@ const ContactPage = () => {
               <X size={24} />
             </button>
             <h2 className="text-3xl font-bold text-[#000066] mb-4">Thank You!</h2>
-            <p className="text-lg text-gray-600">Your request has been submitted successfully.</p>
+            <p className="text-lg text-gray-600">
+              Your request has been submitted successfully.
+            </p>
           </div>
         </div>
       )}
 
-      {/* Contact Hero */}
+      {/* Contact Hero Section */}
       <section
         className="py-32 px-4 relative"
         style={{
           backgroundImage: `linear-gradient(rgba(0,0,102,0.8), rgba(0,0,102,0.9)), url('https://images.pexels.com/photos/2199293/pexels-photo-2199293.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop')`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center'
+          backgroundSize: "cover",
+          backgroundPosition: "center"
         }}
       >
         <div className="max-w-4xl mx-auto text-center relative z-10">
@@ -915,24 +956,22 @@ const ContactPage = () => {
         </div>
       </section>
 
-      {/* Contact Form */}
+      {/* Contact Form Section */}
       <section className="py-32 px-4">
         <div className="max-w-5xl mx-auto">
           <div className="grid lg:grid-cols-2 gap-20">
             {/* Form */}
             <div>
               <h2 className="text-4xl font-black mb-8 text-[#000066]">Get Your Quote</h2>
-              <form onSubmit={handleSubmit} className="space-y-8">
-                <input type="hidden" name="access_key" value="8532b46d-199f-4629-a83a-76b2565b22b2" />
-                <input type="hidden" name="subject" value="New Shipment Request from Website" />
-                <input type="hidden" name="from_name" value="PanIndia Logistics Website" />
+              <div className="space-y-8">
                 <div className="grid md:grid-cols-2 gap-6">
                   <div>
                     <label className="block text-lg font-semibold mb-3">Full Name *</label>
                     <input
                       type="text"
                       name="name"
-                      required
+                      value={formData.name}
+                      onChange={handleInputChange}
                       className="w-full p-4 border-2 border-gray-300 focus:border-[#000066] text-lg bg-gray-50 focus:bg-white"
                       placeholder="Enter your full name"
                     />
@@ -942,7 +981,8 @@ const ContactPage = () => {
                     <input
                       type="email"
                       name="email"
-                      required
+                      value={formData.email}
+                      onChange={handleInputChange}
                       className="w-full p-4 border-2 border-gray-300 focus:border-[#000066] text-lg bg-gray-50 focus:bg-white"
                       placeholder="Enter your email"
                     />
@@ -955,7 +995,8 @@ const ContactPage = () => {
                     <input
                       type="text"
                       name="pickupCity"
-                      required
+                      value={formData.pickupCity}
+                      onChange={handleInputChange}
                       className="w-full p-4 border-2 border-gray-300 focus:border-[#000066] text-lg bg-gray-50 focus:bg-white"
                       placeholder="Where should we pick up?"
                     />
@@ -965,7 +1006,8 @@ const ContactPage = () => {
                     <input
                       type="text"
                       name="dropLocation"
-                      required
+                      value={formData.dropLocation}
+                      onChange={handleInputChange}
                       className="w-full p-4 border-2 border-gray-300 focus:border-[#000066] text-lg bg-gray-50 focus:bg-white"
                       placeholder="Where should we deliver?"
                     />
@@ -976,6 +1018,8 @@ const ContactPage = () => {
                   <label className="block text-lg font-semibold mb-3">Additional Notes</label>
                   <textarea
                     name="notes"
+                    value={formData.notes}
+                    onChange={handleInputChange}
                     rows={6}
                     className="w-full p-4 border-2 border-gray-300 focus:border-[#000066] text-lg bg-gray-50 focus:bg-white resize-none"
                     placeholder="Package details, special instructions, preferred pickup time, weight, dimensions..."
@@ -983,13 +1027,14 @@ const ContactPage = () => {
                 </div>
 
                 <button
-                  type="submit"
-                  className="w-full bg-[#000066] text-white py-6 text-xl font-bold tracking-wide hover:bg-[#000088] inline-flex items-center justify-center gap-3 shadow-lg hover:shadow-xl"
+                  type="button"
+                  onClick={handleSubmit}
+                  className="w-full bg-[#000066] text-white py-6 text-xl font-bold tracking-wide hover:bg-[#000088] inline-flex items-center justify-center gap-3 shadow-lg hover:shadow-xl transition-colors"
                 >
                   SUBMIT REQUEST
                   <ArrowRight size={24} />
                 </button>
-              </form>
+              </div>
             </div>
 
             {/* Contact Info */}
@@ -1082,6 +1127,242 @@ const ContactPage = () => {
     </div>
   );
 };
+
+
+
+
+
+
+
+// const ContactPage = () => {
+//   const [showPopup, setShowPopup] = useState(false);
+
+//   const handleSubmit = (e) => {
+//     e.preventDefault();
+//     const form = e.target;
+
+//     // Submit form via native HTML submission
+//     fetch("https://api.web3forms.com/submit", {
+//       method: "POST",
+//       body: new FormData(form)
+//     })
+//       .then((res) => {
+//         if (res.ok) {
+//           setShowPopup(true);
+//           form.reset();
+//         }
+//       })
+//       .catch((err) => {
+//         console.error("Form submission error:", err);
+//       });
+//   };
+
+//   return (
+//     <div className="pt-20 relative">
+
+//       {/* ✅ Thank You Popup */}
+//       {showPopup && (
+//         <div className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50">
+//           <div className="bg-white rounded-xl p-10 max-w-md w-full text-center shadow-2xl relative">
+//             <button
+//               className="absolute top-4 right-4 text-gray-500 hover:text-black"
+//               onClick={() => setShowPopup(false)}
+//             >
+//               <X size={24} />
+//             </button>
+//             <h2 className="text-3xl font-bold text-[#000066] mb-4">Thank You!</h2>
+//             <p className="text-lg text-gray-600">Your request has been submitted successfully.</p>
+//           </div>
+//         </div>
+//       )}
+
+//       {/* Contact Hero */}
+//       <section
+//         className="py-32 px-4 relative"
+//         style={{
+//           backgroundImage: `linear-gradient(rgba(0,0,102,0.8), rgba(0,0,102,0.9)), url('https://images.pexels.com/photos/2199293/pexels-photo-2199293.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop')`,
+//           backgroundSize: 'cover',
+//           backgroundPosition: 'center'
+//         }}
+//       >
+//         <div className="max-w-4xl mx-auto text-center relative z-10">
+//           <h1 className="text-blue-700 text-6xl md:text-7xl font-black mb-8 tracking-tight leading-none">
+//             Book a<br />
+//             <span className="text-gray-400">Shipment</span>
+//           </h1>
+//           <p className="text-xl text-gray-50 leading-relaxed">
+//             Ready to ship? Get in touch with us and we'll handle the rest with our expert logistics team.
+//           </p>
+//         </div>
+//       </section>
+
+//       {/* Contact Form */}
+//       <section className="py-32 px-4">
+//         <div className="max-w-5xl mx-auto">
+//           <div className="grid lg:grid-cols-2 gap-20">
+//             {/* Form */}
+//             <div>
+//               <h2 className="text-4xl font-black mb-8 text-[#000066]">Get Your Quote</h2>
+//               <form onSubmit={handleSubmit} className="space-y-8">
+//                 <input type="hidden" name="access_key" value="8532b46d-199f-4629-a83a-76b2565b22b2" />
+//                 <input type="hidden" name="subject" value="New Shipment Request from Website" />
+//                 <input type="hidden" name="from_name" value="PanIndia Logistics Website" />
+//                 <div className="grid md:grid-cols-2 gap-6">
+//                   <div>
+//                     <label className="block text-lg font-semibold mb-3">Full Name *</label>
+//                     <input
+//                       type="text"
+//                       name="name"
+//                       required
+//                       className="w-full p-4 border-2 border-gray-300 focus:border-[#000066] text-lg bg-gray-50 focus:bg-white"
+//                       placeholder="Enter your full name"
+//                     />
+//                   </div>
+//                   <div>
+//                     <label className="block text-lg font-semibold mb-3">Email Address *</label>
+//                     <input
+//                       type="email"
+//                       name="email"
+//                       required
+//                       className="w-full p-4 border-2 border-gray-300 focus:border-[#000066] text-lg bg-gray-50 focus:bg-white"
+//                       placeholder="Enter your email"
+//                     />
+//                   </div>
+//                 </div>
+
+//                 <div className="grid md:grid-cols-2 gap-6">
+//                   <div>
+//                     <label className="block text-lg font-semibold mb-3">Pickup City *</label>
+//                     <input
+//                       type="text"
+//                       name="pickupCity"
+//                       required
+//                       className="w-full p-4 border-2 border-gray-300 focus:border-[#000066] text-lg bg-gray-50 focus:bg-white"
+//                       placeholder="Where should we pick up?"
+//                     />
+//                   </div>
+//                   <div>
+//                     <label className="block text-lg font-semibold mb-3">Drop Location *</label>
+//                     <input
+//                       type="text"
+//                       name="dropLocation"
+//                       required
+//                       className="w-full p-4 border-2 border-gray-300 focus:border-[#000066] text-lg bg-gray-50 focus:bg-white"
+//                       placeholder="Where should we deliver?"
+//                     />
+//                   </div>
+//                 </div>
+
+//                 <div>
+//                   <label className="block text-lg font-semibold mb-3">Additional Notes</label>
+//                   <textarea
+//                     name="notes"
+//                     rows={6}
+//                     className="w-full p-4 border-2 border-gray-300 focus:border-[#000066] text-lg bg-gray-50 focus:bg-white resize-none"
+//                     placeholder="Package details, special instructions, preferred pickup time, weight, dimensions..."
+//                   />
+//                 </div>
+
+//                 <button
+//                   type="submit"
+//                   className="w-full bg-[#000066] text-white py-6 text-xl font-bold tracking-wide hover:bg-[#000088] inline-flex items-center justify-center gap-3 shadow-lg hover:shadow-xl"
+//                 >
+//                   SUBMIT REQUEST
+//                   <ArrowRight size={24} />
+//                 </button>
+//               </form>
+//             </div>
+
+//             {/* Contact Info */}
+//             <div className="bg-[#000066] text-white p-12">
+//               <h3 className="text-3xl font-black mb-8">Get in Touch</h3>
+//               <div className="space-y-8">
+//                 <div className="flex items-start gap-4">
+//                   <Mail size={24} className="mt-1 flex-shrink-0" />
+//                   <div>
+//                     <h4 className="text-xl font-bold mb-2">Email Us</h4>
+//                     <p className="text-gray-300">mail@panindialogistics.in</p>
+//                   </div>
+//                 </div>
+//                 <div className="flex items-start gap-4">
+//                   <Phone size={24} className="mt-1 flex-shrink-0" />
+//                   <div>
+//                     <h4 className="text-xl font-bold mb-2">Call Us</h4>
+//                     <p className="text-gray-300">+91 9966660086</p>
+//                   </div>
+//                 </div>
+//                 <div className="flex items-start gap-4">
+//                   <Clock size={24} className="mt-1 flex-shrink-0" />
+//                   <div>
+//                     <h4 className="text-xl font-bold mb-2">Business Hours</h4>
+//                     <p className="text-gray-300">Mon-Sat: 9:30AM - 9:30PM</p>
+//                     <p className="text-gray-300">Sun: 9:30AM - 12:30PM</p>
+//                     <p className="text-gray-300 text-sm mt-2">Emergency service available 24/7</p>
+//                   </div>
+//                 </div>
+//                 <div className="flex items-start gap-4">
+//                   <Home size={24} className="mt-1 flex-shrink-0" />
+//                   <div>
+//                     <h4 className="text-xl font-bold mb-2">Address</h4>
+//                     <p className="text-gray-300">
+//                       H.No. 6-4-15/2/1, Shop No. 3&4, Ground Floor, Opp. Traffic Police Station,
+//                       Aramghar 'X' Road, Shivarampally, Hyderabad-500052.
+//                     </p>
+//                   </div>
+//                 </div>
+//                 <div className="mt-12 pt-8 border-t border-gray-600">
+//                   <h4 className="text-xl font-bold mb-4">Why Choose PanIndiaLogistics?</h4>
+//                   <ul className="space-y-2 text-gray-300">
+//                     <li>• Free quotes and consultations</li>
+//                     <li>• Same-day pickup available</li>
+//                     <li>• Real-time tracking included</li>
+//                     <li>• Fully insured shipments</li>
+//                     <li>• 24/7 customer support</li>
+//                   </ul>
+//                 </div>
+//               </div>
+//             </div>
+//           </div>
+//         </div>
+//       </section>
+
+//       {/* Quick Contact */}
+//       <section className="py-32 px-4 bg-gray-50">
+//         <div className="max-w-7xl mx-auto">
+//           <div className="text-center mb-16">
+//             <h2 className="text-5xl md:text-6xl font-black mb-6 tracking-tight text-[#000066]">
+//               Need Immediate Help?
+//             </h2>
+//             <p className="text-xl text-gray-600">
+//               Our customer service team is standing by to assist you.
+//             </p>
+//           </div>
+
+//           <div className="grid md:grid-cols-3 gap-8">
+//             <div className="text-center p-8 bg-white shadow-lg hover:shadow-xl transition-shadow">
+//               <Phone size={48} className="mx-auto mb-6 text-[#000066]" />
+//               <h3 className="text-2xl font-bold mb-4 text-[#000066]">Call Now</h3>
+//               <p className="text-gray-600 mb-4">Speak directly with our logistics experts</p>
+//               <p className="text-xl font-bold">+91 9966660086</p>
+//             </div>
+//             <div className="text-center p-8 bg-white shadow-lg hover:shadow-xl transition-shadow">
+//               <Mail size={48} className="mx-auto mb-6 text-[#000066]" />
+//               <h3 className="text-2xl font-bold mb-4 text-[#000066]">Email Support</h3>
+//               <p className="text-gray-600 mb-4">Get detailed responses within 2 hours</p>
+//               <p className="text-xl font-bold">mail@panindialogistics.in</p>
+//             </div>
+//             <div className="text-center p-8 bg-[#000066] text-white shadow-lg hover:shadow-xl transition-shadow">
+//               <Clock size={48} className="mx-auto mb-6 text-white" />
+//               <h3 className="text-2xl font-bold mb-4">Emergency Service</h3>
+//               <p className="text-gray-300 mb-4">Urgent shipments handled 24/7</p>
+//               <p className="text-xl font-bold">Available Always</p>
+//             </div>
+//           </div>
+//         </div>
+//       </section>
+//     </div>
+//   );
+// };
 
 
 
